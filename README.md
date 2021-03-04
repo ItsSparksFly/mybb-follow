@@ -42,3 +42,48 @@ while($follower = $db->fetch_array($query)) {
 ```
 
 # Inplaytracker-Plugin mit Follow-Funktion verbinden
+Unter die Zeile
+```
+$db->update_query("threads", $new_record, "tid='{$tid}'");
+```
+
+Folgendes einfügen:
+```
+$query = $db->simple_select("follow", "fromid", "toid='$ownuid'");
+$user = get_user($ownuid);
+while($follower = $db->fetch_array($query)) {
+	if(class_exists('MybbStuff_MyAlerts_AlertTypeManager')) {
+		$alertType = MybbStuff_MyAlerts_AlertTypeManager::getInstance()->getByCode('follow_inplaytracker_newthread');
+		if ($alertType != NULL && $alertType->getEnabled() && $ownuid != $follower['fromid']) {
+			$alert = new MybbStuff_MyAlerts_Entity_Alert((int)$follower['fromid'], $alertType, (int)$tid);
+			$alert->setExtraDetails([
+				'username' => $user['username']
+			]);
+			MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
+		}
+	}
+}
+```
+
+Unter die Zeile
+```
+foreach($partner_uids as $tag) {
+```
+
+Folgendes einfügen:
+```
+$query = $db->simple_select("follow", "fromid", "toid='$tag'");
+$tuser = get_user($tag);
+while($follower = $db->fetch_array($query)) {
+	if(class_exists('MybbStuff_MyAlerts_AlertTypeManager')) {
+        	$alertType = MybbStuff_MyAlerts_AlertTypeManager::getInstance()->getByCode('follow_inplaytracker_newthread');
+        	if ($alertType != NULL && $alertType->getEnabled() && $ownuid != $partner_uid) {
+                        $alert = new MybbStuff_MyAlerts_Entity_Alert((int)$follower['fromid'], $alertType, (int)$tid);
+                        $alert->setExtraDetails([
+                            'username' => $tuser['username']
+                        ]);
+                        MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
+                }
+	}
+}
+```
