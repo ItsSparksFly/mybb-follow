@@ -19,6 +19,8 @@ In das Template member_profile wird die Variable {$follow_button} eingebaut - fa
 
 # Inplayquotes-Plugin mit Follow-Funktion verbinden
 
+<a href="https://github.com/its-sparks-fly/Inplayzitate-2.0">Inplayzitate 2.0</a>
+
 Über die Zeile
 ```
 $insert_array = $db->insert_query("inplayquotes", $new_record);
@@ -42,6 +44,9 @@ while($follower = $db->fetch_array($query)) {
 ```
 
 # Inplaytracker-Plugin mit Follow-Funktion verbinden
+
+<a href="https://github.com/its-sparks-fly/Inplaytracker-2.0/">Inplaytracker 2.0</a>
+
 Unter die Zeile
 ```
 $db->update_query("threads", $new_record, "tid='{$tid}'");
