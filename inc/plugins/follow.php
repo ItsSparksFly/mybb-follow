@@ -1,8 +1,7 @@
 <?php
 
 // Disallow direct access to this file for security reasons
-if(!defined("IN_MYBB"))
-{
+if (!defined("IN_MYBB")) {
 	die("Direct initialization of this file is not allowed.");
 }
 
@@ -30,7 +29,7 @@ function follow_info()
 
 function follow_install()
 {
-    global $db, $cache;
+    global $db, $cache, $lang;
 
     $db->query("CREATE TABLE ".TABLE_PREFIX."follow (
         `fid` int(11) NOT NULL AUTO_INCREMENT,
@@ -101,18 +100,18 @@ function follow_install()
 
     $member_profile_follow = [
         'title'        => 'member_profile_follow',
-        'template'    => $db->escape_string(''),
+        'template'    => $db->escape_string('<a href="misc.php?action=follow&uid={$memprofile[\'uid\']}">{$lang->follow_follow}</a>'),
         'sid'        => '-1',
-        'version'    => '<a href="misc.php?action=follow&uid={$memprofile[\'uid\']}">{$lang->follow_follow}</a>',
+        'version'    => '',
         'dateline'    => TIME_NOW
     ];
 
     $member_profile_unfollow = [
         'title'        => 'member_profile_unfollow',
-        'template'    => $db->escape_string(''),
+        'template'    => $db->escape_string('<a href="misc.php?action=unfollow&uid={$memprofile[\'uid\']}">{$lang->follow_unfollow}</a>'),
         'sid'        => '-1',
-        'version'    => '<a href="misc.php?action=unfollow&uid={$memprofile[\'uid\']}">{$lang->follow_unfollow}</a>',
-        'dateline'    => TIME_NOW}
+        'version'    => '',
+        'dateline'    => TIME_NOW
     ];
 
     $db->insert_query("templates", $member_profile_follow);
