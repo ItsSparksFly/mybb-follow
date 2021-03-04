@@ -85,3 +85,24 @@ while($follower = $db->fetch_array($query)) {
 	}
 }
 ```
+
+Unter die Zeile 
+```
+$tags = explode(",", $partners);
+```
+
+Folgendes einfügen:
+```
+$query = $db->simple_select("follow", "fromid", "toid='$fromid'");
+while($follower = $db->fetch_array($query)) {
+	$alertType = MybbStuff_MyAlerts_AlertTypeManager::getInstance()->getByCode('follow_inplaytracker_newreply');
+        if ($alertType != NULL && $alertType->getEnabled()) {
+        $alert = new MybbStuff_MyAlerts_Entity_Alert((int)$follower['fromid'], $alertType, (int)$thread['tid']);
+        $alert->setExtraDetails([
+        	'subject' => $thread['subject'],
+                 'lastpost' => $last_post
+        ]);
+        MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
+        }
+}
+```
