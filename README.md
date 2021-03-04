@@ -25,18 +25,20 @@ $insert_array = $db->insert_query("inplayquotes", $new_record);
 ```
 Folgendes einfügen:
 ```
-		$query = $db->simple_select("follow", "fromid", "toid='$uid'");
-		while($follower = $db->fetch_array($query)) {
-			if(class_exists('MybbStuff_MyAlerts_AlertTypeManager')) {
-				$user = get_user($uid);
-				$alertType = MybbStuff_MyAlerts_AlertTypeManager::getInstance()->getByCode('inplayquotes_new');
-				if ($alertType != NULL && $alertType->getEnabled()) {
-					$alert = new MybbStuff_MyAlerts_Entity_Alert((int)$follower['fromid'], $alertType, (int)$uid);
-					$alert->setExtraDetails([
-						'username' => $user['username']
-					]);
-					MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
-				}
-			}	
+$query = $db->simple_select("follow", "fromid", "toid='$uid'");
+while($follower = $db->fetch_array($query)) {
+	if(class_exists('MybbStuff_MyAlerts_AlertTypeManager')) {
+		user = get_user($uid);
+		$alertType = MybbStuff_MyAlerts_AlertTypeManager::getInstance()->getByCode('follow_inplayquotes_new');
+		if ($alertType != NULL && $alertType->getEnabled()) {
+			$alert = new MybbStuff_MyAlerts_Entity_Alert((int)$follower['fromid'], $alertType, (int)$uid);
+			$alert->setExtraDetails([
+				'username' => $user['username']
+			]);
+			MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
 		}
+	}	
+}
 ```
+
+# Inplaytracker-Plugin mit Follow-Funktion verbinden
