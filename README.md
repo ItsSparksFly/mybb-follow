@@ -75,15 +75,13 @@ Folgendes einfügen:
 $query = $db->simple_select("follow", "fromid", "toid='$tag'");
 $tuser = get_user($tag);
 while($follower = $db->fetch_array($query)) {
-	if(class_exists('MybbStuff_MyAlerts_AlertTypeManager')) {
-        	$alertType = MybbStuff_MyAlerts_AlertTypeManager::getInstance()->getByCode('follow_inplaytracker_newthread');
-        	if ($alertType != NULL && $alertType->getEnabled() && $ownuid != $partner_uid) {
-                        $alert = new MybbStuff_MyAlerts_Entity_Alert((int)$follower['fromid'], $alertType, (int)$tid);
-                        $alert->setExtraDetails([
-                            'username' => $tuser['username']
-                        ]);
-                        MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
-                }
+	$alertType = MybbStuff_MyAlerts_AlertTypeManager::getInstance()->getByCode('follow_inplaytracker_newthread');
+        if ($alertType != NULL && $alertType->getEnabled() && $ownuid != $partner_uid) {
+        	$alert = new MybbStuff_MyAlerts_Entity_Alert((int)$follower['fromid'], $alertType, (int)$tid);
+                $alert->setExtraDetails([
+                	'username' => $tuser['username']
+                ]);
+        	MybbStuff_MyAlerts_AlertManager::getInstance()->addAlert($alert);
 	}
 }
 ```
