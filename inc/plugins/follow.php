@@ -173,7 +173,8 @@ function follow_misc() {
     if($mybb->input['action'] == "follow") {
         $toid = $mybb->get_input('uid');
         $fromid = $mybb->user['uid'];
-        $name = $mybb->user['fid1'];
+		$fid = $mybb->settings['follow_username'];
+        $name = $mybb->user['fid'.$fid];
 
         $input_array = [
             "fromid" => (int)$fromid,
@@ -187,7 +188,7 @@ function follow_misc() {
 
     if($mybb->input['action'] == "unfollow") {
         $toid = $mybb->get_input('uid');
-        $fid = $mybb->settings['follow_name'];
+        $fid = $mybb->settings['follow_username'];
         $name = $mybb->user['fid'.$fid];
 
         $db->delete_query("follow", "toid = '$toid' AND name = '$name'");
@@ -200,8 +201,8 @@ function follow_profile() {
     global $db, $lang, $templates, $mybb, $memprofile, $follow_button;
     $lang->load('follow');
     $follow_button = "";
-    $fid = $mybb->settings['follow_name'];
-    $name = $mybb->user['fid'.$fid];
+	$fid = $mybb->settings['follow_username'];
+	$name = $mybb->user['fid'.$fid];
 
     if($name == $memprofile['fid'.$fid]) {
         $follow_button = "";
